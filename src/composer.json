@@ -1,0 +1,11 @@
+{
+  "autoload": {
+    "psr-4": {
+      "App\\": "./"
+    },
+    "classmap": ["php/data"]
+  },
+  "require": {
+    "fzaninotto/faker": "^1.9"
+  }
+}
