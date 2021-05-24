@@ -1,0 +1,8 @@
+{
+    "host": "mysql",
+    "port": 3306,
+    "dbname": "pyramid",
+    "charset": "utf8",
+    "username": "root",
+    "password": "11235813"
+}

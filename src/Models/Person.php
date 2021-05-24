@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\php\data;
+namespace App\Models;
 
 
 class Person
@@ -25,7 +25,7 @@ class Person
                                 int $parent_id
     )
     {
-        echo ' constr Person ';
+        //echo ' constr Person ';
         $this->entity_id = $entity_id;
         $this->firstname = $firstname;
         $this->lastname = $lastname;
@@ -39,13 +39,13 @@ class Person
     public function __toString(): string
     {
         return '<tr><td>'. $this->entity_id . "</td><td>" .
-        $this->firstname . "</td><td>" .
-        $this->lastname . "</td><td>" .
-        $this->email . "</td><td>" .
-        $this->position . "</td><td>" .
-        $this->shares_amount . "</td><td>" .
-        $this->start_date . "</td><td>" .
-        $this->parent_id . "</td></tr>";
+            $this->firstname . "</td><td>" .
+            $this->lastname . "</td><td>" .
+            $this->email . "</td><td>" .
+            $this->position . "</td><td>" .
+            $this->shares_amount . "</td><td>" .
+            $this->start_date . "</td><td>" .
+            $this->parent_id . "</td></tr>";
     }
 
     /**
@@ -191,5 +191,4 @@ class Person
         $this->start_date = $start_date;
         return $this;
     }
-
 }

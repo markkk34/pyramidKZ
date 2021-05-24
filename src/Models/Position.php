@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\php\data;
+namespace App\Models;
 
 
 class Position

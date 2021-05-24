@@ -29,8 +29,9 @@ class ComposerStaticInitc78e3eb9a58196a45fd4474fecaba3e8
     );
 
     public static $classMap = array (
-        'App\\php\\data\\Person' => __DIR__ . '/../..' . '/php/data/Person.php',
-        'App\\php\\data\\Position' => __DIR__ . '/../..' . '/php/data/Position.php',
+        'App\\Controllers\\PyramidController' => __DIR__ . '/../..' . '/Controllers/PyramidController.php',
+        'App\\Models\\Person' => __DIR__ . '/../..' . '/Models/Person.php',
+        'App\\Models\\Position' => __DIR__ . '/../..' . '/Models/Position.php',
         'Faker\\Calculator\\Ean' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Ean.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Inn.php',

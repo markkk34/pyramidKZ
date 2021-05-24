@@ -6,8 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'App\\php\\data\\Person' => $baseDir . '/php/data/Person.php',
-    'App\\php\\data\\Position' => $baseDir . '/php/data/Position.php',
+    'App\\Controllers\\PyramidController' => $baseDir . '/Controllers/PyramidController.php',
+    'App\\Models\\Person' => $baseDir . '/Models/Person.php',
+    'App\\Models\\Position' => $baseDir . '/Models/Position.php',
     'Faker\\Calculator\\Ean' => $vendorDir . '/fzaninotto/faker/src/Faker/Calculator/Ean.php',
     'Faker\\Calculator\\Iban' => $vendorDir . '/fzaninotto/faker/src/Faker/Calculator/Iban.php',
     'Faker\\Calculator\\Inn' => $vendorDir . '/fzaninotto/faker/src/Faker/Calculator/Inn.php',

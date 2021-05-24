@@ -3,9 +3,10 @@
     "psr-4": {
       "App\\": "./"
     },
-    "classmap": ["php/data"]
+    "classmap": ["Models", "Controllers", "Components"]
   },
   "require": {
-    "fzaninotto/faker": "^1.9"
+    "fzaninotto/faker": "^1.9",
+    "ext-pdo": "*"
   }
 }
