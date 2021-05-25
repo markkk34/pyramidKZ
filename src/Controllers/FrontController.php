@@ -1,8 +1,16 @@
 <?php
 
-//require_once '../vendor/autoload.php';
-
 use App\Controllers\PyramidController;
 
-$pyramid = new PyramidController();
-$pyramid->createPyramid();
+class FrontController
+{
+    /**
+     * FrontController constructor.
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $pyramid = new PyramidController();
+        $pyramid->createPyramid();
+    }
+}

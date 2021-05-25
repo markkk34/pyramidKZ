@@ -18,11 +18,23 @@ class Connection
         $this->dbConfig = $dbConfig;
     }
 
+    /**
+     * @return PDO
+     */
     public function getConnection() : PDO
     {
-        //var_dump($this->dbConfig->getConfig());
-        $dsn = "mysql:host=%s;port=%s;dbname=%s;charset=%s";
-        $dsn = sprintf($dsn, $this->dbConfig->getHost(), $this->dbConfig->getPort(), $this->dbConfig->getDbname(), $this->dbConfig->getCharset());
-        return new PDO($dsn, $this->dbConfig->getUsername(), $this->dbConfig->getPassword());
+        $dsn = sprintf(
+            "mysql:host=%s;port=%s;dbname=%s;charset=%s",
+            $this->dbConfig->getHost(),
+            $this->dbConfig->getPort(),
+            $this->dbConfig->getDbname(),
+            $this->dbConfig->getCharset()
+        );
+        var_dump($dsn);
+        return new PDO(
+            $dsn,
+            $this->dbConfig->getUsername(),
+            $this->dbConfig->getPassword()
+        );
     }
-} //sprintf()
+}

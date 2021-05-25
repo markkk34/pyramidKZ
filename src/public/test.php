@@ -5,3 +5,16 @@ echo '<br>';
 echo rand(1273449600, time() - 86400); //in the day 86400 sec
 
 echo '     ' . time() - 15638400;
+
+$a = 1;
+
+function inc($a)
+{
+    $a++;
+    return $a;
+
+}
+
+$a = inc($a);
+
+echo '      ' . $a;

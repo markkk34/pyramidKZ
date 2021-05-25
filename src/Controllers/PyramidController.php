@@ -4,12 +4,15 @@
 namespace App\Controllers;
 
 
-use App\Models\Position;
+use App\Db\Config;
+use App\Db\Connection;
+use App\Model\Position;
+use App\Model\Repository\PersonRepository;
+use Exception;
 use Faker\Factory;
-use App\Models\Person;
+use App\Model\Person;
 use JetBrains\PhpStorm\Pure;
 use PDO;
-use PDOException;
 
 class PyramidController
 {
@@ -18,15 +21,23 @@ class PyramidController
      */
     protected PDO $pdo;
 
+    /**
+     * @var Connection
+     */
+    protected Connection $connection;
+
+    /**
+     * @var PersonRepository
+     */
+    protected PersonRepository $personRepository;
+
     public function __construct()
     {
-        try {
-            $this->pdo = connectionToDB();
-            echo 'pyr constr and pdo';
-        }
-        catch (PDOException $exception) {
-            echo 'ERROR' . $exception->getMessage();
-        }
+        echo 'here';//messed up with Connection and Config. I have to new Conf then new Conn
+        $this->connection = new Connection(new Config());
+        $this->pdo = $this->connection->getConnection();
+        $this->personRepository = new PersonRepository();
+        echo 'pyr constr and pdo';
     }
 
     /**
@@ -51,9 +62,11 @@ class PyramidController
     /**
      * @return Person
      */
-    #[Pure] protected function createThePresident(): Person
+    protected function createThePresident(): Person
     {
-        return new Person(
+        $query = 'alter table person auto_increment = 1'; //need to get rid of
+        $this->pdo->exec($query);
+        $person = new Person(
             1,
             'Mike',
             'Patterson',
@@ -63,6 +76,8 @@ class PyramidController
             1273449600,
             0
         );
+        $this->personRepository->save($this->pdo, $person);
+        return $person;
     }
 
     /**
@@ -106,7 +121,11 @@ class PyramidController
      * @param $isRightDateStart
      * @return bool
      */
-    protected function doWeAcceptYouToBeAffiliate($maxAmountOfAffiliates, $allowedAmountForBeingAffiliates, $isRightDateStart): bool
+    protected function doWeAcceptYouToBeAffiliate(
+        $maxAmountOfAffiliates,
+        $allowedAmountForBeingAffiliates,
+        $isRightDateStart
+    ): bool
     {
         if ($maxAmountOfAffiliates <= $allowedAmountForBeingAffiliates) {//1st step varification
             if ($isRightDateStart) { //2nd step varif
@@ -157,7 +176,9 @@ class PyramidController
                 if (!$isAffiliatesOldEnough)
                     break;
             }
-            $amountOfStocksOfParent += $amountOfStocksOfParentAffiliates / 2 + $amountOfStocksOfParentAffiliatesAffiliates / 3;
+            $amountOfStocksOfParent +=
+                $amountOfStocksOfParentAffiliates / 2 +
+                $amountOfStocksOfParentAffiliatesAffiliates / 3;
 
             if ($amountOfStocksOfParent > 1000 && $isAffiliatesOldEnough)
                 return true;
@@ -185,17 +206,95 @@ class PyramidController
         return $idOfTheFutureVicePresident - 1;
     }
 
+    /**
+     * @throws Exception
+     * @return int
+     */
+    public function checkDatabaseForAppropriateDataAndHowMuchParticipants(): int
+    {
+        $amountOfUsers = $this->personRepository->getAmountOfUsers($this->pdo);
+        $i = 1;
+        while ($i <= $amountOfUsers)
+        {
+            $person = $this->personRepository->getUser($i, $this->pdo);
+            $this->checkForTheCorrectTypeOfTheData($person);
+            $i++;
+        }
+
+        return $i;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function checkForTheCorrectTypeOfTheData(Person $person)
+    {
+        /**
+         * Email check
+         * Is it email structure?
+         */
+        if (
+            strpos($person->getEmail(), '@') == false ||
+            strpos($person->getEmail(), '.') == false
+        ) {
+            throw new Exception('Incorrect email structure');
+        }
+
+        /**
+         * Check for position in_array
+         * Is it existed position?
+         */
+        if ($person->getPosition() == Position::VICE_PRESIDENT) {
+        } elseif ($person->getPosition() == Position::MANAGER) {
+        } elseif ($person->getPosition() == Position::NOVICE) {
+        } elseif ($person->getPosition() == Position::PRESIDENT) {
+        } else {
+            throw new Exception('Not existed position');
+        }
+
+        /**
+         * Check for shares_amount
+         * Is it correct type and appropriate value?
+         */
+        if ($person->getSharesAmount() < 0) {  //unsigned in db make!
+            throw new Exception('Not number or minus value');
+        }
+
+
+    }
+
+    /**
+     * @throws Exception
+     */
     public function createPyramid()
     {
+        /**
+         * Check for data in db and how much participants do we have
+         * amount - 1 = real amount
+         */
+        $amountOfAlreadyExistedParticipants = $this->checkDatabaseForAppropriateDataAndHowMuchParticipants();
+
         $faker = Factory::create();
         $persons = [];
-        $persons[] = $this->createThePresident();
+        if ($amountOfAlreadyExistedParticipants == 1) // if no president
+        {
+            $persons[] = $this->createThePresident(); //in db too
+            $amountOfAlreadyExistedParticipants++;
+        } else {  //if we have members  //we dont check if the 1st is the president (cope later, now just believe)
+            //read members from db
+            for ($j = 0; $j < $amountOfAlreadyExistedParticipants - 1; $j++)
+            {
+                $persons[] = $this->personRepository->getUser($j + 1, $this->pdo);
+            }
+        }
 
-        $i = 2;
+        $i = $amountOfAlreadyExistedParticipants;
         do
         {
             //1 step - create
             $person = $this->createOnePerson($i, $faker);
+
+            $this->checkForTheCorrectTypeOfTheData($person);
 
             //2 step - check for affiliates amount
             $maxAmountOfAffiliates = $this->checkForAffiliatesAmount($persons, $person);
@@ -204,7 +303,11 @@ class PyramidController
             //3 step - check start_date
             $isRightDateStart = $this->checkForDateToBeAffiliate($persons, $person);
 
-            if ($this->doWeAcceptYouToBeAffiliate($maxAmountOfAffiliates, $allowedAmountForBeingAffiliates, $isRightDateStart)) {
+            if ($this->doWeAcceptYouToBeAffiliate(
+                $maxAmountOfAffiliates,
+                $allowedAmountForBeingAffiliates,
+                $isRightDateStart
+            )) {
                 $persons[] = $person;
                 $i++;
             }
@@ -217,18 +320,20 @@ class PyramidController
             //step 1 - for being manager
             if ($this->isItEnoughAffiliatesToBeManager($persons, $person))
                 $person->setPosition(Position::MANAGER);
-
             $i++;
         } while ($i < 101);
 
         $persons[$this->whatIsTheIdOfTheFuturePresident($persons)]->setPosition(Position::VICE_PRESIDENT);
 
+        foreach ($persons as $person)
+        {
+            if ($person->getEntityId() == 1)//cause we already have Mike
+                continue;
+            $this->personRepository->save($this->pdo, $person);
+        }
+        $this->personRepository->deleteAllUsersExceptThePresident($this->pdo, $this->personRepository->getAmountOfUsers($this->pdo));
+
         include '../public/Participants.php';
     }
 
 }
-
-
-/*$res = $pdo->query("select * from person");
-          $row = $res->fetch();
-          $i++;*/

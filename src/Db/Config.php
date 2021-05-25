@@ -28,6 +28,7 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Check for .json and extraction the data
      * @return array
      * @throws Exception
      */

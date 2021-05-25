@@ -13,7 +13,6 @@ interface ConfigInterface
     const USERNAME = 'username';
     const PASSWORD = 'password';
 
-
     /**
      * @return string
      */
