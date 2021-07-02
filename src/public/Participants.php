@@ -19,10 +19,10 @@
         <td>parent_id</td>
     </tr>
     <?php
-    foreach ($persons as $person)
-    {
-        echo $person;
-    }
+    require_once '../Controllers/PyramidController.php';
+    $this->showParticipants();
+
+    echo '<br>Amount of members:' . count($persons);
     ?>
 </table>
 

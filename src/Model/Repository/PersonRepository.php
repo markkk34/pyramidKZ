@@ -4,21 +4,39 @@
 namespace App\Model\Repository;
 
 
+use App\Db\Config;
+use App\Db\Connection;
 use App\Model\Person;
 use PDO;
 
 class PersonRepository
 {
     /**
-     * @param PDO $pdo
+     * @var PDO
+     */
+    protected PDO $pdo;
+
+    /**
+     * @var Connection
+     */
+    protected Connection $connection;
+
+    public function __construct()
+    {
+        $this->connection = new Connection(new Config());
+        $this->pdo        = $this->connection->getConnection();
+        echo '  pdo works in rep';
+    }
+
+    /**
      * @param Person $person
      */
-    public function save(PDO $pdo, Person $person)
+    public function save(Person $person) : void
     {
-        $query = 'insert into person (firstname, lastname, email, position, shares_amount, start_date, parent_id)
-                    values(?, ?, ?, ?, ?, ?, ?)';
-        $stmt = $pdo->prepare($query);
+        $stmt = $this->pdo->prepare('insert into person (entity_id, firstname, lastname, email, position, shares_amount, start_date, parent_id)
+                    values(?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([
+            $person->getEntityId(),
             $person->getFirstname(),
             $person->getLastname(),
             $person->getEmail(),
@@ -30,29 +48,26 @@ class PersonRepository
     }
 
     /**
-     * @param PDO $pdo
+     *
      */
-    public function deleteAllUsersExceptThePresident(PDO $pdo, $amountOfUsers)
+    public function deleteAllUsers() : void
     {
-        $query = '
-                delete from person where entity_id between 2 and 1000;
-                alter table person auto_increment = 2;
-                ';
-        $pdo->exec($query);
+        $this->pdo->exec(
+            'delete from person;
+            alter table person auto_increment = 1;'
+        );
     }
 
     /**
      * @param int $id
-     * @param PDO $pdo
-     * @return Person
+     * @return Person|null
      */
-    public function getUser(int $id, PDO $pdo): Person
+    public function getUser(int $id): ?Person
     {
-        $query = 'select * from person where entity_id = ?';
-        $stmt = $pdo->prepare($query);
+        $stmt  = $this->pdo->prepare('select * from person where entity_id = ?');
         $stmt->execute([$id]);
-        $data = $stmt->fetchAll();
-        return new Person(
+        $data  = $stmt->fetchAll();
+        return isset($data[0]['entity_id']) ? new Person(
             $id,
             $data[0]['firstname'],
             $data[0]['lastname'],
@@ -61,19 +76,77 @@ class PersonRepository
             $data[0]['shares_amount'],
             $data[0]['start_date'],
             $data[0]['parent_id']
-        );
+        ) : null;
     }
 
     /**
-     * @param PDO $pdo
+     * @return array
+     */
+    public function getAllUsers(): array
+    {
+        $resultSet = $this->pdo->query('select * from person');
+        return $resultSet->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Person::class);
+    }
+
+    /**
+     * @return Person|null
+     */
+    public function getPresident(): ?Person
+    {
+        $result = $this->pdo->query('select * from person where position = "president"');
+        if ($row = $result->fetch()) {
+            return new Person(
+                $row['entity_id'],
+                $row['firstname'],
+                $row['lastname'],
+                $row['email'],
+                $row['position'],
+                $row['shares_amount'],
+                $row['start_date'],
+                $row['parent_id']
+            );
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * @return int
      */
-    public function getAmountOfUsers(PDO $pdo): int
+    public function getAmountOfUsers(): int
     {
-        $query = 'select count(*) from person';
-        $stmt = $pdo->query($query);
+        $stmt  = $this->pdo->query('select count(*) from person');
         return $stmt->fetch()['count(*)'];
     }
 
+    /**
+     * @return array
+     */
+    public function getAllUsersId(): array
+    {
+        return $this->pdo->query('select entity_id from person')
+            ->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * @param array $presidentData
+     */
+    public function createPresident(array $presidentData) : void
+    {
+        $stmt = $this->pdo->prepare(
+            'insert into person (firstname, lastname, email, position, shares_amount, start_date, parent_id)
+                    values(?, ?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+                           $presidentData[0]['firstname'],
+                           $presidentData[0]['lastname'],
+                           $presidentData[0]['email'],
+                           $presidentData[0]['position'],
+                           $presidentData[0]['shares_amount'],
+                           $presidentData[0]['start_date'],
+                           $presidentData[0]['parent_id']
+
+                       ]);
+    }
 
 }

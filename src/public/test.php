@@ -1,4 +1,21 @@
 <?php
+
+echo date('Y m h i s', 12234312313);
+$a[][] = 1;
+var_dump($a);
+/*$a = [1, '3', 6];
+list($one, $two, $three) = $a;
+echo $one . '  ' . $two . '  ' . $three . '<br>';
+
+$a = [1, 2, 3];
+$b = [4, 5, 6];
+
+echo $a + $b;*/
+
+/*$a[] = null;
+echo ($a[0] != null) ? 1 : 0;*/
+
+/*phpinfo();
 echo date('d M Y h i s', 1273449600);
 echo '<br>';
 //echo time();
@@ -8,13 +25,17 @@ echo '     ' . time() - 15638400;
 
 $a = 1;
 
-function inc($a)
+function inc()
 {
-    $a++;
-    return $a;
-
+    return [1, 2];
 }
 
-$a = inc($a);
+function abc()
+{
+    return [3, 4];
+}
 
-echo '      ' . $a;
+$a = inc();
+$a = abc();
+
+echo '      ' . $a[1] . $a[0];*/

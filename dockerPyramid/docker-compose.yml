@@ -21,5 +21,18 @@ services:
             - mysqldata:/var/lib/mysql
         ports:
             - 3306:3306
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: pmapyramid
+        restart: always
+        ports:
+            - 8082:80
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            MYSQL_ROOT_PASSWORD: 11235813
+        links:
+            - mysql:mysql
+
 volumes:
    mysqldata: {}

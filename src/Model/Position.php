@@ -4,10 +4,14 @@
 namespace App\Model;
 
 
-class Position
+class Position implements PositionInterface
 {
-    public const VICE_PRESIDENT = 'vice president';
-    public const MANAGER = 'manager';
-    public const NOVICE = 'novice';
-    public const PRESIDENT = 'president';
+    /**
+     * @return array
+     */
+    public function getPositions() : array
+    {
+        return [self::NOVICE, self::MANAGER, self::VICE_PRESIDENT, self::PRESIDENT];
+    }
+
 }
