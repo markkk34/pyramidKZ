@@ -1,8 +1,34 @@
 <?php
 
-echo date('Y m h i s', 12234312313);
-$a[][] = 1;
+function f(array &$a): array
+{
+    unset($a[1]);
+    return $a;
+}
+
+$a = [1, 2, 3];
 var_dump($a);
+f($a);
+var_dump($a);
+/*try {
+    throw new Exception('Omaeua');
+    echo '!!!!!!!!';
+} catch (Exception $exception) {
+    echo $exception->getMessage();
+}
+echo 34131;*/
+
+/*$affiliatesOfTheParent = [1, 2, 3, 4, 5, 6];
+for ($i = count($affiliatesOfTheParent); $i > 4; $i--) {
+    echo $affiliatesOfTheParent[$i - 1] . ' ';
+}*/
+
+/*$a = [ 2 => 'a', 4 => 'b'];
+$a[] = 'c';
+var_dump($a);*/
+/*echo date('Y m h i s', 12234312313);
+$a[][] = 1;
+var_dump($a);*/
 /*$a = [1, '3', 6];
 list($one, $two, $three) = $a;
 echo $one . '  ' . $two . '  ' . $three . '<br>';

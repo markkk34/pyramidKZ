@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Db;
-
-use Exception;
+namespace App\Model\Config\DbConfig;
 
 interface ConfigInterface
 {

@@ -1,6 +1,8 @@
 <?php
-namespace App\Db;
 
+namespace App\Model\Config\DbConfig;
+
+use App\Model\Config\Reader;
 use Exception;
 
 class Config implements ConfigInterface
@@ -10,7 +12,7 @@ class Config implements ConfigInterface
     /**
      * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * @var array
@@ -32,20 +34,10 @@ class Config implements ConfigInterface
      * @return array
      * @throws Exception
      */
-    protected function getConfig() : array
+    protected function getConfig(): array
     {
-        if (!file_exists($this->path)) {
-            throw new Exception('Specified path doesnt exist');
-        }
-        $content = file_get_contents($this->path);
-        if (!$content) {
-            throw new Exception('There is file but couldnt be read');
-        }
-        $config = json_decode($content, true);
-        if (json_last_error() > 0) {
-            throw new Exception('There was error while decoding: ' . json_last_error_msg());
-        }
-        return $config;
+        $reader = new Reader();
+        return $reader->readJSON(self::PATH);
     }
 
     /**

@@ -6,36 +6,80 @@ namespace App\Model;
 
 class Person
 {
+    /**
+     * @var int|null
+     */
     public ?int $entity_id;
+
+    /**
+     * @var string|null
+     */
     public ?string $firstname;
+
+    /**
+     * @var string|null
+     */
     public ?string $lastname;
+
+    /**
+     * @var string|null
+     */
     public ?string $email;
+
+    /**
+     * @var string|null
+     */
     public ?string $position;
+
+    /**
+     * @var int|null
+     */
     public ?int $shares_amount;
+
+    /**
+     * @var int|null
+     */
     public ?int $start_date;
+
+    /**
+     * @var int|null
+     */
     public ?int $parent_id;
 
-    public function __construct(?int $entity_id = null,
-                                ?string $firstname = null,
-                                ?string $lastname = null,
-                                ?string $email = null,
-                                ?string $position = null,
-                                ?int $shares_amount = null,
-                                ?int $start_date = null,
-                                ?int $parent_id = null
-    )
-    {
-        //echo ' constr Person ';
-        $this->entity_id = $entity_id;
+    /**
+     * Person constructor.
+     * @param int|null $entityId
+     * @param string|null $firstname
+     * @param string|null $lastname
+     * @param string|null $email
+     * @param string|null $position
+     * @param int|null $shares_amount
+     * @param int|null $startDate
+     * @param int|null $parentId
+     */
+    public function __construct(
+        ?int $entityId = null,
+        ?string $firstname = null,
+        ?string $lastname = null,
+        ?string $email = null,
+        ?string $position = null,
+        ?int $shares_amount = null,
+        ?int $startDate = null,
+        ?int $parentId = null
+    ) {
+        $this->entity_id = $entityId;
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->email = $email;
         $this->position = $position;
         $this->shares_amount = $shares_amount;
-        $this->start_date = $start_date;
-        $this->parent_id = $parent_id;
+        $this->start_date = $startDate;
+        $this->parent_id = $parentId;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return '<tr><td>'. $this->entity_id . "</td><td>" .
@@ -46,6 +90,23 @@ class Person
             $this->shares_amount . "</td><td>" .
             $this->start_date . "</td><td>" .
             $this->parent_id . "</td></tr>";
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'entity_id' => $this->entity_id,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'position' => $this->position,
+            'shares_amount' => $this->shares_amount,
+            'start_date' => $this->start_date,
+            'parent_id' => $this->parent_id
+        ];
     }
 
     /**

@@ -3,7 +3,6 @@
 
 namespace App\Model;
 
-
 interface PositionInterface
 {
     const VICE_PRESIDENT = 'vice president';

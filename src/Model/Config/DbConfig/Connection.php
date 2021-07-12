@@ -1,9 +1,7 @@
 <?php
 
+namespace App\Model\Config\DbConfig;
 
-namespace App\Db;
-
-use App\Db\Config;
 use PDO;
 
 class Connection
@@ -11,8 +9,12 @@ class Connection
     /**
      * @var Config
      */
-    private $dbConfig;
+    private Config $dbConfig;
 
+    /**
+     * Connection constructor.
+     * @param Config $dbConfig
+     */
     public function __construct(Config $dbConfig)
     {
         $this->dbConfig = $dbConfig;
@@ -21,7 +23,7 @@ class Connection
     /**
      * @return PDO
      */
-    public function getConnection() : PDO
+    public function getConnection(): PDO
     {
         $dsn = sprintf(
             "mysql:host=%s;port=%s;dbname=%s;charset=%s",

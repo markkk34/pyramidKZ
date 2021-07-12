@@ -1,8 +1,8 @@
 <?php
 
-
 namespace App\Model;
 
+use App\Model\PositionInterface;
 
 class Position implements PositionInterface
 {
@@ -13,5 +13,4 @@ class Position implements PositionInterface
     {
         return [self::NOVICE, self::MANAGER, self::VICE_PRESIDENT, self::PRESIDENT];
     }
-
 }

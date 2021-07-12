@@ -1,11 +1,10 @@
 <?php
 
-
 namespace App\Model\Repository;
 
-
-use App\Db\Config;
-use App\Db\Connection;
+use App\Controllers\Logger;
+use App\Model\Config\DbConfig\Config;
+use App\Model\Config\DbConfig\Connection;
 use App\Model\Person;
 use PDO;
 
@@ -21,11 +20,21 @@ class PersonRepository
      */
     protected Connection $connection;
 
-    public function __construct()
+    /**
+     * @var Logger
+     */
+    protected Logger $logger;
+
+    /**
+     * PersonRepository constructor.
+     * @param Logger $logger
+     */
+    public function __construct(Logger $logger)
     {
+        $this->logger = $logger;
         $this->connection = new Connection(new Config());
-        $this->pdo        = $this->connection->getConnection();
-        echo '  pdo works in rep';
+        $this->pdo = $this->connection->getConnection();
+        echo '  pdo works in rep<br>';
     }
 
     /**
@@ -115,7 +124,7 @@ class PersonRepository
      */
     public function getAmountOfUsers(): int
     {
-        $stmt  = $this->pdo->query('select count(*) from person');
+        $stmt = $this->pdo->query('select count(*) from person');
         return $stmt->fetch()['count(*)'];
     }
 
@@ -138,13 +147,13 @@ class PersonRepository
                     values(?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
-                           $presidentData[0]['firstname'],
-                           $presidentData[0]['lastname'],
-                           $presidentData[0]['email'],
-                           $presidentData[0]['position'],
-                           $presidentData[0]['shares_amount'],
-                           $presidentData[0]['start_date'],
-                           $presidentData[0]['parent_id']
+                           $presidentData['firstname'],
+                           $presidentData['lastname'],
+                           $presidentData['email'],
+                           $presidentData['position'],
+                           $presidentData['shares_amount'],
+                           $presidentData['start_date'],
+                           $presidentData['parent_id']
 
                        ]);
     }
