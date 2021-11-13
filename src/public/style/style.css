@@ -1,0 +1,52 @@
+body {
+  background: linear-gradient(to top, #a6aae8, #7ee9ea);
+}
+
+.google-visualization-orgchart-node-large {
+  transition: 0.7s;
+  padding: 10px;
+}
+
+.google-visualization-orgchart-node-large:hover {
+  -webkit-transform: scale(1.15);
+  background: #eaf5fd;
+}
+
+.google-visualization-orgchart-node-large:hover > .president {
+  background: #eaf5fd;
+  -webkit-transform: scale(1.15);
+}
+
+.president {
+  background: #1c85f8;
+}
+
+.google-visualization-orgchart-node-large:hover > .vice-president {
+  background: #eaf5fd;
+}
+
+.vice-president {
+  background: #00bd41;
+}
+
+.google-visualization-orgchart-node-large:hover > .manager {
+  background: #eaf5fd;
+}
+
+.manager {
+  background: #d8ff00;
+}
+
+.google-visualization-orgchart-node-large:hover > .novice {
+  background: #eaf5fd;
+}
+
+.novice {
+  background: #ffb700;
+}
+
+.fab {
+  font-weight: 900 !important;
+}
+
+/*# sourceMappingURL=style.css.map */

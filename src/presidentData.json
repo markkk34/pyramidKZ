@@ -1,0 +1,10 @@
+{
+  "entity_id": 1,
+  "firstname": "Mike",
+  "lastname": "Patterson",
+  "email": "mike@gmail.com",
+  "position": "president",
+  "shares_amount": 10000,
+  "start_date": 1273449600,
+  "parent_id": 0
+}

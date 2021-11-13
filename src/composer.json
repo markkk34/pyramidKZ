@@ -1,0 +1,14 @@
+{
+  "autoload": {
+    "psr-4": {
+      "App\\": "./"
+    },
+    "classmap": [
+      "Model", "Controllers"]
+  },
+  "require": {
+    "fzaninotto/faker": "^1.9",
+    "ext-pdo": "*",
+    "psr/log": "^1.1.4"
+  }
+}
